@@ -156,6 +156,8 @@ public class BellmanFordTest {
         if (n == 0)
             return true;
         int offset = expected.indexOf(actual.get(0));
+        if (offset == -1)
+            return false;
         for (int i = 0; i < expected.size(); i++) {
             if ((int) actual.get(i) != expected.get((i + offset) % n))
                 return false;
