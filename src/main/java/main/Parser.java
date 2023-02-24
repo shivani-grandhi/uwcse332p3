@@ -14,21 +14,19 @@ public class Parser {
      * @return Adjacency list
      */
     public static ArrayList<HashMap<Integer, Integer>> parse(int[][] adjMatrix) {
-        int cost = 0;
-        int l = adjMatrix[0].length;
-        ArrayList<HashMap<Integer, Integer>> al = new ArrayList<HashMap<Integer, Integer>>(l);
-        for (int i=0; i<l; i++) {
-            al.add(i, new HashMap<Integer, Integer>());
+        int length = adjMatrix[0].length;
+        ArrayList<HashMap<Integer, Integer>> arraylist = new ArrayList<HashMap<Integer, Integer>>(length);
+        for (int i=0; i < length; i++) {
+            arraylist.add(i, new HashMap<Integer, Integer>());
         }
-        for (int i = 0; i < l; i++) {
-            for (int j = 0; j < adjMatrix.length; j++) {
-                if (adjMatrix[i][j] != Integer.MAX_VALUE) {//!= 0 || adjMatrix[i][j] != Integer.MAX_VALUE) {//Integer.MAX_VALUE) {
-                    al.get(i).put(j, adjMatrix[i][j]);
+        for (int j = 0; j < length; j++) {
+            for (int k = 0; k < adjMatrix.length; k++) {
+                if (adjMatrix[j][k] != Integer.MAX_VALUE) {
+                    arraylist.get(j).put(k, adjMatrix[j][k]);
                 }
             }
         }
-
-        return al;
+        return arraylist;
     }
 
     /**
