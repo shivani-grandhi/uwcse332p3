@@ -24,25 +24,18 @@ public class OutSequential implements BellmanFordSolver {
         Arrays.fill(P, -1);
         D[source] = 0;
 
-        for (int i = 0; i < numVertices; i++) {
-            // Create a new array for storing the updated values of D
-            int[] newD = new int[numVertices];
-            System.arraycopy(D, 0, newD, 0, numVertices); // Manually copy D to newD
-
+        for (int i = 0; i < numVertices - 1; i++) {
             // Relax all edges
             for (int u = 0; u < numVertices; u++) {
                 HashMap<Integer, Integer> edges = adjList.get(u);
                 for (int v : edges.keySet()) {
                     int weight = edges.get(v);
-                    if (newD[v] > D[u] + weight) {
-                        newD[v] = D[u] + weight;
+                    if (D[u] != Integer.MAX_VALUE && D[v] > D[u] + weight) {
+                        D[v] = D[u] + weight;
                         P[v] = u;
                     }
                 }
             }
-
-            // Update D with the new values
-            System.arraycopy(newD, 0, D, 0, numVertices);
         }
 
 // Step 3: Finding negative-cost cycles (same for all implementations)
