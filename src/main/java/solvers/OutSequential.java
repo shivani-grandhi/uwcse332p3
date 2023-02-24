@@ -17,7 +17,7 @@ public class OutSequential implements BellmanFordSolver {
         ArrayList<HashMap<Integer, Integer>> adjList = Parser.parse(adjMatrix);
         int numVertices = adjList.size();
 
-// Initialize D and P arrays
+
         int[] D = new int[numVertices];
         int[] P = new int[numVertices];
         Arrays.fill(D, Integer.MAX_VALUE);
@@ -39,8 +39,20 @@ public class OutSequential implements BellmanFordSolver {
         }
 
 // Step 3: Finding negative-cost cycles (same for all implementations)
-        List<Integer> cycle = (LinkedList<Integer>) GraphUtil.getCycle(P);
-        return cycle;
+        List<Integer> negativeCycle = new ArrayList<>();
+        int[] prev = new int[adjMatrix.length];
+        for (int i = 0; i < prev.length; i++) {
+            prev[i] = P[i];
+        }
+
+        List<Integer> cycle = GraphUtil.getCycle(prev);
+        if (cycle.size() > 0) {
+            for (int i = 0; i < cycle.size(); i++) {
+                negativeCycle.add(cycle.get(i));
+            }
+        }
+
+        return negativeCycle;
 
     }
 
