@@ -16,9 +16,9 @@ public class RelaxOutTaskLock extends RecursiveAction {
     private int[] dst;
     private int[] p;
     private int lo, hi;
-    Lock[][] lock;
+    ReentrantLock[][] lock;
     private ArrayList<HashMap<Integer, Integer>> adjList;
-    public RelaxOutTaskLock(int[] src, int[] dst, int[] p, int lo, int hi, ArrayList<HashMap<Integer, Integer>> adjList, Lock[][] lock) {
+    public RelaxOutTaskLock(int[] src, int[] dst, int[] p, ArrayList<HashMap<Integer, Integer>> adjList, int lo, int hi, ReentrantLock[][] lock) {
         this.src = src;
         this.dst = dst;
         this.lo = lo;
@@ -35,8 +35,8 @@ public class RelaxOutTaskLock extends RecursiveAction {
         }
 
         int mid = lo + (hi - lo)/2;
-        RelaxOutTaskLock left = new RelaxOutTaskLock(src, dst,  p, lo, mid, adjList, lock);
-        RelaxOutTaskLock right = new RelaxOutTaskLock(src, dst, p, mid, hi, adjList, lock);
+        RelaxOutTaskLock left = new RelaxOutTaskLock(src, dst,  p, adjList, lo, mid, lock);
+        RelaxOutTaskLock right = new RelaxOutTaskLock(src, dst, p, adjList, mid, hi, lock);
         left.fork();
         right.compute();
         left.join();
@@ -58,15 +58,15 @@ public class RelaxOutTaskLock extends RecursiveAction {
             lock[lo][h].unlock();
         }
 
-    }
-    public static void parallel(int[] src, int[] dst, int[] p,  ArrayList<HashMap<Integer, Integer>> adjList) {
-        Lock[][] lock = new Lock[src.length][src.length];
+    }public static void parallel(int[] src, int[] dst, int[] p, ArrayList<HashMap<Integer, Integer>> adjList) {
+        ReentrantLock[][] lock = new ReentrantLock[src.length][src.length];
         for(int i = 0; i < src.length; i++) {
             for (int j = 0; j < src.length; j++) {
                 lock[i][j] = new ReentrantLock();
             }
         }
-        pool.invoke(new RelaxOutTaskLock(src, dst, p, 0, src.length, adjList, lock));
+        pool.invoke(new RelaxOutTaskLock(src, dst, p, adjList, 0, src.length, lock));
     }
+
 
 }
